@@ -198,7 +198,7 @@ class GgDiGraph(nx.DiGraph):
 
 		else:
 
-			print(method + ' not implimented.')
+			print(method + ' not implemented.')
 
 			return 0
 
@@ -937,6 +937,9 @@ def import_gg_graph(path):
 	:param path: file path
 	:return: a GG graph genome object
 	"""
+
+	# TODO: handle the attribute type of long in input file
+
 	graph_obj = nx.read_graphml(path)
 
 	out_graph = GgDiGraph(graph_obj)
@@ -1834,12 +1837,12 @@ def link_nodes(graph_obj, sequence_name, node_prefix='gn'):
 
 		if (node_1, node_2) in edges_obj:
 
-			print(node_1)
-			print(node_2)
+			##testing## print(node_1)
+			##testing## print(node_2)
 			#nx.write_graphml(graph_obj, 'problemG')
-			print(graph_obj.get_edge_data(node_1, node_2))
-			print(graph_obj.get_edge_data(node_1, node_2)[0]['ids'])
-			print(graph_obj.get_edge_data(node_1, node_2)[0]['ids'].split(','))
+			##testing## print(graph_obj.get_edge_data(node_1, node_2))
+			##testing## print(graph_obj.get_edge_data(node_1, node_2)[0]['ids'])
+			##testing## print(graph_obj.get_edge_data(node_1, node_2)[0]['ids'].split(','))
 
 			if sequence_name not in graph_obj.get_edge_data(node_1, node_2)[0]['ids'].split(','):
 
@@ -1877,22 +1880,25 @@ def add_sequences_to_graph(graph_obj, paths_dict):
 
 	for node, data in graph_obj.nodes(data=True):
 
-		seq_source = data['ids'].split(',')[0]
+		node_ids = data['ids'].split(',')
+
 		is_reversed = False
 
-		if len(seq_source) < 1:
+		if len(node_ids) < 1:
 			logging.error('No ids current node')
 			logging.error(node)
 
 		else:
-			ref_seq = input_parser(paths_dict[1][seq_source])[0]['DNA_seq']
+			isolate_ref = node_ids[0]
+			ref_seq = [sub_dict for sub_dict in paths_dict \
+						if sub_dict['gene_details'] == isolate_ref][0]['DNA_seq']
 
 			# Check orientation
-			if int(data[seq_source + '_leftend']) < 0:
+			if int(data[isolate_ref + '_leftend']) < 0:
 				is_reversed = True
 
-			seq_start = abs(int(data[seq_source + '_leftend']))
-			seq_end = abs(int(data[seq_source + '_rightend']))
+			seq_start = abs(int(data[isolate_ref + '_leftend']))
+			seq_end = abs(int(data[isolate_ref + '_rightend']))
 
 			if seq_start > seq_end:
 				logging.error('Something wrong with orientation')
