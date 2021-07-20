@@ -227,18 +227,19 @@ if __name__ == '__main__':
 
 		fasta_object = input_parser(args.input_file)
 
-		print('Adding', len(fasta_object), 'sequences')
-
 		seqStartDict = {}
 
 		for seq_entry in fasta_object:
 			seqStartDict[seq_entry['gene_details']] = 1
 
-		new_graph = fasta_alignment_to_subnet(args.input_file, true_start=seqStartDict, add_seq=True)
+		new_graph = fasta_alignment_to_subnet(args.input_file, true_start=seqStartDict)
 
 		nx.write_graphml(new_graph, 'intermediate_virus_Graph.xml')
 
-		# new_graph = add_sequences_to_graph(new_graph, fasta_object)
+		# add sequences to the graph if required
+		if args.should_add_seq:
+			print('Adding', len(fasta_object), 'sequences')
+			new_graph = add_sequences_to_graph(new_graph, fasta_object)
 
 		nx.write_graphml(new_graph, args.out_file_name + '.xml')
 

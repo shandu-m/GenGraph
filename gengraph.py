@@ -2322,7 +2322,7 @@ def import_gtf_dict_to_massive_dict(gtf_dict):
 	return all_dict
 
 
-def fasta_alignment_to_subnet(fasta_aln_file, true_start={}, node_prefix='X', orientation={}, re_link_nodes=True, add_seq=False):
+def fasta_alignment_to_subnet(fasta_aln_file, true_start={}, node_prefix='X', orientation={}, re_link_nodes=True):
 	"""
 	Conversion of a fasta alignment file from a MSA to a subnetwork that can replace a block node in the main network.
 	:param fasta_aln_file:
@@ -2330,7 +2330,6 @@ def fasta_alignment_to_subnet(fasta_aln_file, true_start={}, node_prefix='X', or
 	:param node_prefix:
 	:param orientation:
 	:param re_link_nodes:
-	:param add_seq:
 	:return:
 	"""
 
@@ -2508,16 +2507,6 @@ def fasta_alignment_to_subnet(fasta_aln_file, true_start={}, node_prefix='X', or
 		for a_isolate in all_isolate_list:
 			local_node_network = link_nodes(local_node_network, a_isolate, node_prefix='gn')
 
-	# Here we add the seq if required
-
-	if add_seq == True:
-		new_fasta_list = []
-
-		for a_seq in aln_lol:
-			new_fasta_list.append({'DNA_seq':a_seq['DNA_seq'].replace('-', ''), 'gene_details':a_seq['gene_details']})
-
-		local_node_network = add_sequences_to_graph_fastaObj(local_node_network, new_fasta_list)
-
 	node_check(local_node_network)
 
 	return local_node_network
@@ -2604,7 +2593,7 @@ def local_node_realign_new(in_graph, node_ID, seq_fasta_paths_dict):
 
 	#fasta_alignment_to_bbone('temp_aln.fasta', 'temp_aln', true_start=node_seq_start_pos)
 
-	new_subgraph = fasta_alignment_to_subnet('temp_aln.fasta', true_start=node_seq_start_pos, node_prefix=node_ID, orientation=orientation_dict, re_link_nodes=False, add_seq=True)
+	new_subgraph = fasta_alignment_to_subnet('temp_aln.fasta', true_start=node_seq_start_pos, node_prefix=node_ID, orientation=orientation_dict, re_link_nodes=False)
 
 	#nx.write_graphml(new_subgraph, 'test_new_subg_327.xml')
 
