@@ -120,6 +120,7 @@ class GgDiGraph(nx.DiGraph):
 
 		res_string = str(success_count) + '/' + str(total_annos) + ' annotations transferred'
 
+		out_file.close()
 		return res_string
 
 	def ids(self):
@@ -882,6 +883,7 @@ class GgDiGraph(nx.DiGraph):
 			file.write('\t\t"readToGraphPercent": "' + str(AlignedReads[i]['percentageofalignedreadtograph']) + '",\n')
 			file.write('\t}\n')
 		file.write(']')
+		file.close()
 
 	def extract_JSON(self,JSONfile):
 		print('7 line block format for each aligned read')
@@ -924,6 +926,8 @@ class GgDiGraph(nx.DiGraph):
 			print(qPercent[qPercent.find(':')+3:-3])
 			print(rPercent[rPercent.find(':')+3:-3])
 			print()
+
+		file.close()
 
 		return AlignedRead
 
@@ -1077,10 +1081,14 @@ def input_file_check(input_dict):
 			if chrom_count != 1:
 				errors_list.append('Input file fail - ' + str(chrom_count) + ' chromosomes seen in fasta file: ' + a_fasta_path)
 
+			file.close()
+
 	return errors_list
 
 
 def input_parser(file_path, parse_as='default'):
+
+	input_file.close() ####
 	if file_path[-3:] == ".fa" or file_path[-6:] == ".fasta":
 		input_file = open(file_path, "r")
 		output_list = []
@@ -1112,9 +1120,12 @@ def input_parser(file_path, parse_as='default'):
 
 		output_list.append(gene_ID_dict)
 
+		input_file.close()
+
 		return output_list
 
 	if file_path[-4:] == ".bim":
+		### sure we want to just pass an open filestream?
 		input_file = open(file_path, "r")
 		return input_file
 		
@@ -1125,6 +1136,7 @@ def input_parser(file_path, parse_as='default'):
 		return result
 
 	if file_path[-4:] == ".ssv":
+		### automatically closed?
 		data_table = csv.reader(open(file_path, 'r'), delimiter=';')
 		data_matrix = list(data_table)
 		result = np.array(data_matrix)
@@ -2836,6 +2848,9 @@ def convert_transcriptome_to_aln_input(trans_fasta_path, out_name):
 
 		out_file_gtf.write(gtf_line)
 
+	out_file_fasta.close()
+	out_file_gtf.close()
+
 
 # --------------------- Sequence extraction related
 
@@ -3204,6 +3219,8 @@ def generate_graph_report(in_graph, out_file_name):
 
 	report_file.write("\nDensity: " + str(nx.density(in_graph)))
 
+	report_file.close()
+
 	return nx_summary
 
 
@@ -3308,7 +3325,6 @@ def create_GFA(G, filename):
 		#writing paths		
 		for p in paths.keys():			
 			f.write('P\t%s\t%s\t%sM\n'%(p, ','.join(paths[p]), 'M,'.join([ nodes[int(n[:-1])][1] for n in paths[p]])))
-	f.close()
 	
 	return
 
@@ -3437,7 +3453,6 @@ def read_GFA(path):
 		G.graph['isolates'] = ','.join(paths)
 	
 	G = GgDiGraph(G)
-	f.close()
 	return G
 
 
@@ -3571,6 +3586,8 @@ def extract_anno_pan_genome_csv(graph_obj, gtf_dict, out_file_name, refseq='', s
 
 
 		added_list.append(isolate)
+
+	outfile_obj.close()
 
 
 def get_anno_from_coordinates(in_gtf_lol, start_pos, stop_pos, tollerence):
