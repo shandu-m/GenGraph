@@ -1088,7 +1088,6 @@ def input_file_check(input_dict):
 
 def input_parser(file_path, parse_as='default'):
 
-	input_file.close() ####
 	if file_path[-3:] == ".fa" or file_path[-6:] == ".fasta":
 		input_file = open(file_path, "r")
 		output_list = []
