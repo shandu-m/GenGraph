@@ -1,7 +1,6 @@
 # Dependencies
 
 import networkx as nx
-from gengraphTool import *
 
 # Built in
 
@@ -1795,14 +1794,13 @@ def realign_all_nodes(inGraph, input_dict):
 	return inGraph
 
 
-def link_nodes(graph_obj, sequence_name, node_prefix='gn'):
+def link_nodes(graph_obj, sequence_name):
 	"""
 	Create edges between all the nodes from a given sequence. The sequence is generally a
 	isolate, and is specified in the sequence file. If there is a gap in the sequence that is not
 	represented by a node, a new node will be created.
 	:param graph_obj: A networkx graph object containing nodes.
 	:param sequence_name: The identifier used for the sequence.
-	:param node_prefix: Depreciated, will be removed.
 	:return: A networkx graph object.
 	"""
 
@@ -2516,7 +2514,7 @@ def fasta_alignment_to_subnet(fasta_aln_file, true_start={}, node_prefix='X', or
 
 	if re_link_nodes == True:
 		for a_isolate in all_isolate_list:
-			local_node_network = link_nodes(local_node_network, a_isolate, node_prefix='gn')
+			local_node_network = link_nodes(local_node_network, a_isolate)
 
 	node_check(local_node_network)
 

@@ -5,7 +5,7 @@ import pkg_resources
 
 if __name__ == '__main__':
 
-	parser = argparse.ArgumentParser(description='''Welcome to GenGraph v0.1''', epilog="""Tools for the creation and use of graph genomes""")
+	parser = argparse.ArgumentParser(description='Welcome to GenGraph v0.1', epilog='Tools for the creation and use of graph genomes')
 
 	parser.add_argument('toolkit', type=str, default='test_mode', help='Select the tool you would like to use')
 
@@ -65,9 +65,9 @@ if __name__ == '__main__':
 	# Setting up logging
 
 	if not args.out_file_name:
-		logging.basicConfig(filename='new_run.log', level=logging.DEBUG)
+		logging.basicConfig(filename='new_run.log', filemode='w', level=logging.DEBUG)
 	else:
-		logging.basicConfig(filename=args.out_file_name + '.log', level=logging.DEBUG)
+		logging.basicConfig(filename=args.out_file_name + '.log', filemode='w', level=logging.DEBUG)
 	# Check NetworkX version
 	nx_version = pkg_resources.get_distribution("networkx").version
 
@@ -223,7 +223,7 @@ if __name__ == '__main__':
 		# --input_file
 		# --out_file_name
 
-
+		print('Creating genome graph from fasta')
 
 		fasta_object = input_parser(args.input_file)
 
@@ -364,7 +364,7 @@ if __name__ == '__main__':
 	# create_fasta_from_pangenome_csv(args.input_file, test_gtf_dict, parsed_input_dict, args.out_file_name)
 
 	if args.toolkit == 'extract_gene':
-		'''Return the sequence of a gene'''
+		# Return the sequence of a gene
 
 		# --seq_file
 		# --graph_file
