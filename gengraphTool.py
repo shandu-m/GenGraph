@@ -234,7 +234,7 @@ if __name__ == '__main__':
 
 		new_graph = fasta_alignment_to_subnet(args.input_file, true_start=seqStartDict)
 
-		nx.write_graphml(new_graph, 'intermediate_virus_Graph.xml')
+		nx.write_graphml(new_graph, 'intermediate_virus_Graph.xml') ### for debugging
 
 		# add sequences to the graph if required
 		if args.should_add_seq:
